@@ -1,8 +1,8 @@
 import express from "express";
 import morgan from "morgan";
 
-// // import itemRoutes
-// import itemRoutes from "./api/v1/routes/itemRoutes";
+// import itemRoutes
+import employeeRoutes from "./api/v1/routes/employeeRoutes";
 
 // import setupSwagger endpoint
 import setupSwagger from "../config/swagger"; 
@@ -18,13 +18,13 @@ app.use(express.json());
 // setup swagger for api documentation
 setupSwagger(app);
 
-
 /**
- * @swagger
+ * @openapi
  * /health:
  *   get:
  *     summary: Health check for the server
  *     description: Returns the server health status.
+ *     tags: [Health]
  *     responses:
  *       200:
  *         description: Server is healthy
@@ -39,7 +39,7 @@ app.listen(PORT, () => {
 });
 
 
-// // register itemRoutes
-// app.use("/api/v1/items", itemRoutes)
+// register itemRoutes
+app.use("/api/v1/employees", employeeRoutes)
 
 export default app;
