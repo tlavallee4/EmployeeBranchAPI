@@ -18,6 +18,17 @@ app.use(express.json());
 // setup swagger for api documentation
 setupSwagger(app);
 
+
+/**
+ * @swagger
+ * /health:
+ *   get:
+ *     summary: Health check for the server
+ *     description: Returns the server health status.
+ *     responses:
+ *       200:
+ *         description: Server is healthy
+ */
 app.get("/health", (req, res) => {
 	res.send("Server is healthy");
 });
