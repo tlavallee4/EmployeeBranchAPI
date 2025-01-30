@@ -8,3 +8,4 @@ describe("GET /health", () => {
 		expect(response.text).toBe("Server is healthy");
 	});
 });
+
