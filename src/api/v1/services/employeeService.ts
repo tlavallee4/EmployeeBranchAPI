@@ -1,0 +1,67 @@
+// Create interface for Employees
+export type Employee = {
+    employeeId: string;
+    employeeName: string;
+    employeePosition: string;
+    employeeDepartment: string;
+    employeeEmail: string;
+    employeePhone: string;
+    employeeBranchId: string;
+}
+
+// employee stored
+const employees: Employee[] = [];
+
+// get all employees
+export const fetchAllEmployees = async() : Promise<Employee[]> => {
+    return employees;
+}
+
+
+// create a new employee
+export const createEmployee = async( employee: {
+    employeeName: string;
+    employeePosition: string;
+    employeeDepartment: string;
+    employeeEmail: string;
+    employeePhone: string;
+    employeeBranchId: string;
+}): Promise<Employee> => { 
+    // ...item is a spread. spreads out the value to an array
+    // get an id
+    const newEmployee: Employee = {employeeId: Date.now().toString(), ...employee};
+    // add the employee to Employee storage    
+    employees.push(newEmployee);
+        // return created employee
+        return newEmployee;
+};
+
+// Update employee
+// Iterate through employees by id
+export const updateEmployee = async(
+    employeeId:string, 
+    employee: {employeeName: string, employeePosition: string, employeeDepartment: string,
+        employeeEmail: string, employeePhone: string, employeeBranchId: string}
+): Promise<Employee> => {
+    const index: number = employees.findIndex((i) => i.employeeId === employeeId);
+    // if match not found
+    if(index === -1){
+        throw new Error(`Item with ID ${employeeId} not found`);
+    }
+    // Updating the employee
+    employees[index] = {employeeId, ...employee}
+    // Return the updated employee
+    return employees[index]
+};
+
+// Delete employee
+export const deleteEmployee = async (employeeId: string): Promise<void> => {
+    const index: number = employees.findIndex((i) => i.employeeId === employeeId);
+
+    // If no id employee match is found
+    if (index === -1) {
+        throw new Error(`Item with ID ${employeeId} not found`);
+    }
+    // else remove the employee
+    employees.splice(index, 1);
+};

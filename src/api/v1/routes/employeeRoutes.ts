@@ -4,7 +4,7 @@ import * as employeeController from "../controllers/employeeController";
 const router: Router = express.Router();
 
 // Get all employees (read)
-router.get("/", employeeController.getAllEmployees);
+router.get("/", employeeController.getEmployees);
 
 // Create a new employee (create)
 router.post("/", employeeController.createEmployee);
