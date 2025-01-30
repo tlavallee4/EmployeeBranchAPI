@@ -25,9 +25,22 @@ router.get("/", branchController.getBranches);
  *     tags: [Branches]
  *     responses:
  *       201:
- *         description: New branch made
+ *         description: Newly created branch object, including a unique ID
  */
 router.post("/", branchController.createBranch);
+
+// Get branch by id
+/**
+ * @openapi
+ * /api/v1/branches/{id}:
+ *   get:
+ *     summary: Get a branch by ID
+ *     tags: [Branches]
+ *     responses:
+ *       200:
+ *         description: return the branch object for the specified ID
+ */
+router.get("/:id", branchController.getBranchById);
 
 // Update a branch by ID (update)
 /**
@@ -38,7 +51,7 @@ router.post("/", branchController.createBranch);
  *     tags: [Branches]
  *     responses:
  *       200:
- *         description: Branch updated
+ *         description: updated branch object, reflecting the changes
  */
 router.put("/:id", branchController.updateBranch);
 

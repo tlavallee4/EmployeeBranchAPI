@@ -16,9 +16,23 @@ const router: Router = express.Router();
  */
 router.get("/", employeeController.getEmployees);
 
-
 // Create a new employee (create)
 router.post("/", employeeController.createEmployee);
+
+// Get an employee by ID (read)
+/**
+ * @openapi
+ * /api/v1/employees/{id}:
+ *   get:
+ *     summary: Get an employee by ID
+ *     tags: [Employees]
+ *     responses:
+ *       200:
+ *         description: Employee details
+ *       404:
+ *         description: Employee not found
+ */
+router.get("/:id", employeeController.getEmployeeById);
 
 // Update an employee by ID (update)
 router.put("/:id", employeeController.updateEmployee);

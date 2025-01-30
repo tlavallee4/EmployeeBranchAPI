@@ -29,10 +29,28 @@ const employees: Employee[] = [
         employeePhone: "204-555-0193",
         employeeBranchId: "3",
     },
+    {
+        employeeId: "3",
+        employeeName: "Maria Garcia",
+        employeePosition: "Loan Officer",
+        employeeDepartment: "Loans",
+        employeeEmail: "maria.garcia@pixell-river.com",
+        employeePhone: "204-555-0193",
+        employeeBranchId: "3",
+    },
+    {
+        employeeId: "4",
+        employeeName: "James Wilson",
+        employeePosition: "IT Support Specialist",
+        employeeDepartment: "IT",
+        employeeEmail: "james.wilson@pixell-river.com",
+        employeePhone: "604-555-0134",
+        employeeBranchId: "1",
+    },
 ];
 
 // get all employees
-export const fetchAllEmployees = async() : Promise<Employee[]> => {
+export const getEmployees = async() : Promise<Employee[]> => {
     return employees;
 }
 
@@ -52,6 +70,11 @@ export const createEmployee = async( employee: {
     employees.push(newEmployee);
         // return created employee
         return newEmployee;
+};
+
+// Get employee by ID
+export const getEmployeeById = async (id: string): Promise<Employee | null> => {
+    return employees.find((employee) => employee.employeeId === id) || null;
 };
 
 // Update employee
@@ -83,3 +106,4 @@ export const deleteEmployee = async (employeeId: string): Promise<void> => {
     // else remove the employee
     employees.splice(index, 1);
 };
+

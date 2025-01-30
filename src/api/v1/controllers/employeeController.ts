@@ -10,7 +10,7 @@ export const getEmployees = async (
 ): Promise<void> => {
     try {
         // Fetch all employees from the service and storing it in employees
-        const employees: Employee[] = await employeeService.fetchAllEmployees();
+        const employees: Employee[] = await employeeService.getEmployees();
         res.status(200).json({ message: "Employees received", data: employees });
     } catch (error) {
         // pass to next function if error
@@ -34,6 +34,24 @@ export const createEmployee = async (
     }
 };
 
+// Get employee by ID 
+export const getEmployeeById = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const employee = await employeeService.getEmployeeById(req.params.id);
+        if (!employee) {
+            res.status(404).json({ message: `Employee with ID ${req.params.id} not found` });
+            return;
+        }
+        res.status(200).json({ message: "Employee found", data: employee });
+    } catch (error) {
+        next(error);
+    }
+};
+
 // Update an employee
 export const updateEmployee = async(
     req: Request,
@@ -51,6 +69,7 @@ export const updateEmployee = async(
     }
 };
 
+// Delete an employee
 export const deleteEmployee = async(
     req: Request, 
     res: Response,
