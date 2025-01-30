@@ -4,11 +4,13 @@ import * as employeeController from "../src/api/v1/controllers/employeeControlle
 
 // Mocks for the employee controller methods
 jest.mock("../src/api/v1/controllers/employeeController", () => ({
-	getEmployees: jest.fn((req, res) => res.status(200).send()),
-	createEmployee: jest.fn((req, res) => res.status(201).send()),
-	updateEmployee: jest.fn((req, res) => res.status(200).send()),
-	deleteEmployee: jest.fn((req, res) => res.status(200).send()),
+    getEmployees: jest.fn((req, res) => res.status(200).send()),
+    createEmployee: jest.fn((req, res) => res.status(201).send()),
+    getEmployeeById: jest.fn((req, res) => res.status(200).send()), // Add this
+    updateEmployee: jest.fn((req, res) => res.status(200).send()),
+    deleteEmployee: jest.fn((req, res) => res.status(200).send()),
 }));
+
 
 describe("Employee Routes", () => {
 	afterEach(() => {
