@@ -10,13 +10,31 @@ export type Employee = {
 }
 
 // employee stored
-const employees: Employee[] = [];
+const employees: Employee[] = [
+    {
+        employeeId: "1",
+        employeeName: "Alice Johnson",
+        employeePosition: "Branch Manager",
+        employeeDepartment: "Management",
+        employeeEmail: "alice.johnson@pixell-river.com",
+        employeePhone: "604-555-0148",
+        employeeBranchId: "1",
+    },
+    {
+        employeeId: "2",
+        employeeName: "Bob Smith",
+        employeePosition: "Software Engineer",
+        employeeDepartment: "IT",
+        employeeEmail: "bob.smith@pixell-river.com",
+        employeePhone: "204-555-0193",
+        employeeBranchId: "3",
+    },
+];
 
 // get all employees
 export const fetchAllEmployees = async() : Promise<Employee[]> => {
     return employees;
 }
-
 
 // create a new employee
 export const createEmployee = async( employee: {
