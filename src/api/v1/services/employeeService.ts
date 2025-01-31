@@ -107,3 +107,14 @@ export const deleteEmployee = async (employeeId: string): Promise<void> => {
     employees.splice(index, 1);
 };
 
+// New Endpoint
+
+// Get employee by branch id
+export const getEmployeesByBranch = async (branchId: string): Promise<Employee[]> => {
+    return employees.filter((employee) => employee.employeeBranchId === branchId);
+};
+
+// Get employee by department 
+export const getEmployeesByDepartment = async (department: string): Promise<Employee[]> => {
+    return employees.filter((employee) => employee.employeeDepartment.toLowerCase() === department.toLowerCase());
+};

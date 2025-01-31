@@ -95,4 +95,52 @@ router.put("/:id", employeeController.updateEmployee);
  */
 router.delete("/:id", employeeController.deleteEmployee);
 
+// New Endpoints
+
+// Get all employees for a branch
+/**
+ * @openapi
+ * /api/v1/employees/branch/{branchId}:
+ *   get:
+ *     summary: Get all employees for a specific branch
+ *     tags: [Employees]
+ *     parameters:
+ *       - in: path
+ *         name: branchId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the branch
+ *     responses:
+ *       200:
+ *         description: A list of employees for the branch
+ *       404:
+ *         description: No employees found for the branch
+ */
+router.get("/branch/:branchId", employeeController.getEmployeesByBranch);
+
+
+// Get employees by department 
+/**
+ * @openapi
+ * /api/v1/employees/department/{department}:
+ *   get:
+ *     summary: Get all employees for a specific department
+ *     tags: [Employees]
+ *     parameters:
+ *       - in: path
+ *         name: department
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The department name
+ *     responses:
+ *       200:
+ *         description: A list of employees for the department
+ *       404:
+ *         description: No employees found for the department
+ */
+router.get("/department/:department", employeeController.getEmployeesByDepartment);
+
+
 export default router;

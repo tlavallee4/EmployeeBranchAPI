@@ -81,3 +81,45 @@ export const deleteEmployee = async(
         next(error);
     }
 };
+
+// New Endpoints 
+
+// Get employee by branch 
+export const getEmployeesByBranch = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const branchId = req.params.branchId;
+        const employees = await employeeService.getEmployeesByBranch(branchId);
+
+        if (employees.length === 0) {
+            res.status(404).json({ message: `No employees found for branch ID ${branchId}` });
+            return;
+        }
+        res.status(200).json({ message: "Employees found", data: employees });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Get employee by department 
+export const getEmployeesByDepartment = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+): Promise<void> => {
+    try {
+        const department = req.params.department;
+        const employees = await employeeService.getEmployeesByDepartment(department);
+
+        if (employees.length === 0) {
+            res.status(404).json({ message: `No employees found for department ${department}` });
+            return;
+        }
+        res.status(200).json({ message: "Employees found", data: employees });
+    } catch (error) {
+        next(error);
+    }
+};

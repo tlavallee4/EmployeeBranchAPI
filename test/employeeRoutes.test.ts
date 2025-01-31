@@ -9,6 +9,9 @@ jest.mock("../src/api/v1/controllers/employeeController", () => ({
     getEmployeeById: jest.fn((req, res) => res.status(200).send()),
     updateEmployee: jest.fn((req, res) => res.status(200).send()),
     deleteEmployee: jest.fn((req, res) => res.status(200).send()),
+    getEmployeesByBranch: jest.fn((req, res) => res.status(200).send()),
+    getEmployeesByDepartment: jest.fn((req, res) => res.status(200).send()),
+
 }));
 
 describe("Employee Routes", () => {
@@ -59,6 +62,21 @@ describe("Employee Routes", () => {
         it("should call deleteEmployee controller", async () => {
             await request(app).delete("/api/v1/employees/1");
             expect(employeeController.deleteEmployee).toHaveBeenCalled();
+        });
+    });
+
+    // New Endpoints Test
+    describe("GET /api/v1/employees/branch/:branchId", () => {
+        it("should call getEmployeesByBranch controller", async () => {
+            await request(app).get("/api/v1/employees/branch/1");
+            expect(employeeController.getEmployeesByBranch).toHaveBeenCalled();
+        });
+    });
+
+    describe("GET /api/v1/employees/department/:department", () => {
+        it("should call getEmployeesByDepartment controller", async () => {
+            await request(app).get("/api/v1/employees/department/IT");
+            expect(employeeController.getEmployeesByDepartment).toHaveBeenCalled();
         });
     });
 });
