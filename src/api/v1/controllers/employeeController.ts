@@ -36,8 +36,8 @@ export const createEmployee = async (
 
 // Get employee by ID 
 export const getEmployeeById = async (
-    req: Request, 
-    res: Response, 
+    req: Request,
+    res: Response,
     next: NextFunction
 ): Promise<void> => {
     try {
@@ -51,7 +51,6 @@ export const getEmployeeById = async (
         next(error);
     }
 };
-
 // Update an employee
 export const updateEmployee = async(
     req: Request,
