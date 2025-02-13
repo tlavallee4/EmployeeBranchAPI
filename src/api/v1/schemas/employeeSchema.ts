@@ -3,28 +3,28 @@ import Joi, { ObjectSchema } from "joi";
 
 // Defining a schema using Joi's object validation method for employee data
 export const employeeSchema: ObjectSchema = Joi.object({ 
-  name: Joi.string().required().messages({
+  employeeName: Joi.string().required().messages({
     "any.required": "Employee name is required.",
     "string.empty": "Employee name cannot be empty.",
   }),
-  // name required, If missing, it triggers validation message
+  // employeeName required, If missing, it triggers validation message
 
-  position: Joi.string().required().messages({
+  employeePosition: Joi.string().required().messages({
     "any.required": "Employee position is required.",
     "string.empty": "Employee position cannot be empty.",
   }),
-  // position required, triggers validation message if left empty
+  // employeePosition required, triggers validation message if left empty
 
-  email: Joi.string().email().required().messages({
+  employeeEmail: Joi.string().email().required().messages({
     "any.required": "Employee email is required.",
     "string.empty": "Employee email cannot be empty.",
     "string.email": "Employee email must be a valid email address.",
   }),
-  // email is required, triggers validation messages if empty or invalid
+  // employeeEmail is required, triggers validation messages if empty or invalid
 
-  branchId: Joi.string().required().messages({
+  employeeBranchId: Joi.string().required().messages({
     "any.required": "Branch ID is required.",
     "string.empty": "Branch ID cannot be empty.",
   }),
-  // branch id required, triggers validation message if left empty
+  // employeeBranchId required, triggers validation message if left empty
 });
