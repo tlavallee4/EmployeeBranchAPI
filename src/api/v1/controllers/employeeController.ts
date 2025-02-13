@@ -51,7 +51,9 @@ export const getEmployeeById = async (
             res.status(404).json({ message: `Employee with ID ${req.params.id} not found` });
             return;
         }
-        res.status(200).json({ message: "Employee found", data: employee });
+        res.status(200).json(
+            successResponse(employee, "Employee found")
+        );
     } catch (error) {
         next(error);
     }
@@ -107,7 +109,9 @@ export const getEmployeesByBranch = async (
             res.status(404).json({ message: `No employees found for branch ID ${branchId}` });
             return;
         }
-        res.status(200).json({ message: "Employees found", data: employees });
+        res.status(200).json(
+            successResponse(employees,  "Employees found")
+        );
     } catch (error) {
         next(error);
     }
@@ -127,7 +131,9 @@ export const getEmployeesByDepartment = async (
             res.status(404).json({ message: `No employees found for department ${department}` });
             return;
         }
-        res.status(200).json({ message: "Employees found", data: employees });
+        res.status(200).json(
+            successResponse(employees, "Employees found")
+        );
     } catch (error) {
         next(error);
     }

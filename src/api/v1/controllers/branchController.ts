@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import * as branchService from "../services/branchService";
-import type { Branch } from "../services/branchService";
+import type { Branch } from "../models/branchModel";
 import { successResponse } from "../models/responseModel";
 
 // Get all branches
@@ -11,8 +11,10 @@ export const getBranches = async (
 ): Promise<void> => {
     try {
         // Fetch all branches from the service and store in branches
-        const branches: Branch[] = await branchService.getBranches();
-        res.status(200).json({ message: "Branches received", data: branches });
+        const branches: Branch[] = await branchService.getAllBranches();
+        res.status(200).json(
+            successResponse(branches, "Branches received")
+        );
     } catch (error) {
         // Pass to the next function if error
         next(error);
@@ -29,7 +31,9 @@ export const createBranch = async (
         // Create a new branch using the service and store in branch
         const newBranch: Branch = await branchService.createBranch(req.body);
         // 201 means successful creation
-        res.status(201).json({ message: "Branch created", data: newBranch });
+        res.status(201).json(
+            successResponse(newBranch, "Item created successfully")
+    );
     } catch (error) {
         next(error);
     }
@@ -47,7 +51,9 @@ export const getBranchById = async (
             res.status(404).json({ message: `Branch with ID ${req.params.id} not found` });
             return;
         }
-        res.status(200).json({ message: "Branch found", data: branch });
+        res.status(200).json(
+            successResponse(branch, "Branch found")
+        );
     } catch (error) {
         next(error);
     }
@@ -64,7 +70,9 @@ export const updateBranch = async (
             req.params.id,
             req.body
         );
-        res.status(200).json({ message: "Branch updated", data: updatedBranch });
+        res.status(200).json( 
+            successResponse(updateBranch, "Item updated successfully")
+    );
     } catch (error) {
         next(error);
     }
@@ -78,7 +86,9 @@ export const deleteBranch = async (
 ): Promise<void> => {
     try {
         await branchService.deleteBranch(req.params.id);
-        res.status(200).json({ message: "Branch deleted" });
+        res.status(200).json(
+            successResponse(null, "Item deleted successfully")
+        );
     } catch (error) {
         next(error);
     }
