@@ -19,13 +19,6 @@ interface FieldValuePair {
   fieldValue: FirestoreDataTypes; // Value to match for deletion
 }
 
-/**
- * Runs a Firestore transaction.
- * Ensures multiple read/write operations occur atomically.
- * 
- * @param operations - A function that performs Firestore operations inside the transaction.
- * @returns The result of the transaction.
- */
 export const runTransaction = async <T>(
   operations: (transaction: FirebaseFirestore.Transaction) => Promise<T>
 ): Promise<T> => {
@@ -37,15 +30,6 @@ export const runTransaction = async <T>(
   }
 };
 
-/**
- * Creates a Firestore document with an optional custom ID.
- * If no ID is provided, Firestore will generate one automatically.
- * 
- * @param collectionName - The name of the Firestore collection.
- * @param data - The data to store in the document.
- * @param id - (Optional) The document ID to use.
- * @returns The document ID of the newly created document.
- */
 export const createDocument = async <T>(
   collectionName: string,
   data: Partial<T>,
@@ -70,12 +54,6 @@ export const createDocument = async <T>(
   }
 };
 
-/**
- * Retrieves all documents from a Firestore collection.
- * 
- * @param collectionName - The name of the Firestore collection.
- * @returns A QuerySnapshot containing all documents in the collection.
- */
 export const getDocuments = async (
   collectionName: string
 ): Promise<FirebaseFirestore.QuerySnapshot> => {
@@ -87,13 +65,6 @@ export const getDocuments = async (
   }
 };
 
-/**
- * Retrieves a single document from Firestore by its ID.
- * 
- * @param collectionName - The name of the Firestore collection.
- * @param id - The document ID to retrieve.
- * @returns The DocumentSnapshot or null if not found.
- */
 export const getDocumentById = async <T>(
   collectionName: string,
   id: string
@@ -111,13 +82,6 @@ export const getDocumentById = async <T>(
   }
 };
 
-/**
- * Updates an existing Firestore document.
- * 
- * @param collectionName - The name of the Firestore collection.
- * @param id - The document ID to update.
- * @param data - The updated data fields.
- */
 export const updateDocument = async <T>(
   collectionName: string,
   id: string,
@@ -131,14 +95,6 @@ export const updateDocument = async <T>(
   }
 };
 
-/**
- * Deletes a single Firestore document.
- * If a transaction is provided, the deletion will be part of the transaction.
- * 
- * @param collectionName - The name of the Firestore collection.
- * @param id - The document ID to delete.
- * @param transaction - (Optional) Firestore transaction object.
- */
 export const deleteDocument = async (
   collectionName: string,
   id: string,
@@ -162,14 +118,6 @@ export const deleteDocument = async (
   }
 };
 
-/**
- * Deletes multiple Firestore documents based on specific field-value conditions.
- * Can be executed within a transaction or as a batch operation.
- * 
- * @param collectionName - The name of the Firestore collection.
- * @param fieldValuePairs - An array of field-value conditions to match documents.
- * @param transaction - (Optional) Firestore transaction object.
- */
 export const deleteDocumentsByFieldValues = async (
   collectionName: string,
   fieldValuePairs: FieldValuePair[],

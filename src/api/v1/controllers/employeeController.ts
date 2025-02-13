@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import * as employeeService from "../services/employeeService";
-import type { Employee } from "../services/employeeService";
+import type { Item } from "../models/responseModel";
+import { successResponse } from "../models/responseModel";
 
 // Get employees
 export const getEmployees = async (
