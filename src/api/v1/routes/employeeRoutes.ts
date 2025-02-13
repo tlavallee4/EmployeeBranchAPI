@@ -1,5 +1,14 @@
 import express, { Router } from "express";
-import * as employeeController from "../controllers/employeeController";
+import { validateRequest } from "../middleware/validate";
+import { employeeSchema } from "../schemas/employeeSchema";
+import { getEmployees, 
+        createEmployee, 
+        getEmployeeById, 
+        updateEmployee, 
+        deleteEmployee, 
+        getEmployeesByBranch, 
+        getEmployeesByDepartment 
+    } from "../controllers/employeeController";
 
 const router: Router = express.Router();
 
@@ -14,7 +23,7 @@ const router: Router = express.Router();
  *       200:
  *         description: List of all employees - id, name, position, department, email, phone, branch id
  */
-router.get("/", employeeController.getEmployees);
+router.get("/", getEmployees);
 
 // Create a new employee (create)
 /**
@@ -72,7 +81,7 @@ router.get("/", employeeController.getEmployees);
  *                     employeeBranchId:
  *                       example: "1"
  */
-router.post("/", employeeController.createEmployee);
+router.post("/", validateRequest(employeeSchema), createEmployee);
 
 // Get an employee by ID (read)
 /**
@@ -94,7 +103,7 @@ router.post("/", employeeController.createEmployee);
  *       404:
  *         description: Employee not found
  */
-router.get("/:id", employeeController.getEmployeeById);
+router.get("/:id", getEmployeeById);
 
 // Update an employee by ID (update)
 /**
@@ -141,7 +150,7 @@ router.get("/:id", employeeController.getEmployeeById);
  *                 employeePhone:
  *                   type: string
  */
-router.put("/:id", employeeController.updateEmployee);
+router.put("/:id", validateRequest(employeeSchema), updateEmployee);
 
 // Delete an employee by ID (delete)
 /**
@@ -163,7 +172,7 @@ router.put("/:id", employeeController.updateEmployee);
  *       404:
  *         description: Employee not found
  */
-router.delete("/:id", employeeController.deleteEmployee);
+router.delete("/:id", validateRequest(employeeSchema), deleteEmployee);
 
 // New Endpoints
 
@@ -187,7 +196,7 @@ router.delete("/:id", employeeController.deleteEmployee);
  *       404:
  *         description: No employees found for the branch
  */
-router.get("/branch/:branchId", employeeController.getEmployeesByBranch);
+router.get("/branch/:branchId", getEmployeesByBranch);
 
 
 // Get employees by department 
@@ -210,7 +219,7 @@ router.get("/branch/:branchId", employeeController.getEmployeesByBranch);
  *       404:
  *         description: No employees found for the department
  */
-router.get("/department/:department", employeeController.getEmployeesByDepartment);
+router.get("/department/:department", getEmployeesByDepartment);
 
 
 export default router;
