@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import * as employeeService from "../services/employeeService";
-import type { Item } from "../models/responseModel";
+import type { Employee } from "../models/employeeModel";
 import { successResponse } from "../models/responseModel";
 
 // Get employees
@@ -11,8 +11,10 @@ export const getEmployees = async (
 ): Promise<void> => {
     try {
         // Fetch all employees from the service and storing it in employees
-        const employees: Employee[] = await employeeService.getEmployees();
-        res.status(200).json({ message: "Employees received", data: employees });
+        const employees: Employee[] = await employeeService.getAllEmployees();
+        res.status(200).json(
+            successResponse(employees, "Employees received")
+        );
     } catch (error) {
         // pass to next function if error
         next(error);
@@ -29,7 +31,9 @@ export const createEmployee = async (
         // Create a new employee using the service and storing in employee
         const newEmployee: Employee = await employeeService.createEmployee(req.body);
         // 201 means successful creation
-        res.status(201).json({ message: "Employee created", data: newEmployee });
+        res.status(201).json(
+            successResponse(newEmployee, "Employee created")
+        );
     } catch (error) {
         next(error);
     }
@@ -63,7 +67,9 @@ export const updateEmployee = async(
             req.params.id,
             req.body
         );
-        res.status(200).json({message: "Employee updated", data:updatedEmployee});
+        res.status(200).json(
+            successResponse(updateEmployee, "Employee updated")
+        );
     }catch(error){
         next(error);
     }
@@ -77,7 +83,9 @@ export const deleteEmployee = async(
 ): Promise<void> => {
     try{
         await employeeService.deleteEmployee(req.params.id);
-        res.status(200).json({message: "Employee deleted"});
+        res.status(200).json(
+            successResponse(null, "Employee deleted")
+        );    
     }catch(error){
         next(error);
     }

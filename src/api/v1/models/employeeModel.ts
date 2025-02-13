@@ -1,8 +1,11 @@
 import { CreateReadStreamOptions } from "fs/promises";
 
 export interface Employee {
-    name: string;
-    position: string; 
-    email: string;
-    branchId: string;
+    employeeId: string;
+    employeeName: string; 
+    employeePosition: string;
+    employeeDepartment: string;
+    employeeEmail:string;
+    employeePhone: string;
+    employeeBranchId: string;
 }

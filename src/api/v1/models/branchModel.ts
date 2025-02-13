@@ -1,7 +1,8 @@
 import { CreateReadStreamOptions } from "fs/promises";
 
 export interface Branch {
-    name: string;
-    address: string; 
-    phone: string;
+    branchId: string;
+    branchName: string; 
+    branchAddress: string;
+    branchPhone: string;
 }
