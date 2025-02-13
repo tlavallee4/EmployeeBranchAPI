@@ -1,5 +1,12 @@
 import express, { Router } from "express";
-import * as branchController from "../controllers/branchController";
+import { validate, validateRequest } from "../middleware/validate";
+import { branchSchema } from "../schemas/branchSchema";
+import { createBranch, 
+        getBranches,
+        getBranchById, 
+        updateBranch,
+        deleteBranch,
+} from "../controllers/branchController";
 
 const router: Router = express.Router();
 
@@ -45,7 +52,7 @@ const router: Router = express.Router();
  *                     branchPhone:
  *                       example: 604-456-0022
  */
-router.post("/", branchController.createBranch);
+router.post("/", validateRequest(branchSchema), createBranch);
 
 // Get all branches (read)
 /**
@@ -73,7 +80,7 @@ router.post("/", branchController.createBranch);
  *                   branchPhone:
  *                     example: 604-456-0022
  */
-router.get("/", branchController.getBranches);
+router.get("/", getBranches);
 
 // Get branch by ID
 /**
@@ -95,7 +102,7 @@ router.get("/", branchController.getBranches);
  *       404:
  *         description: Branch not found
  */
-router.get("/:id", branchController.getBranchById);
+router.get("/:id", getBranchById);
 
 // Update a branch by ID (update)
 /**
@@ -121,7 +128,7 @@ router.get("/:id", branchController.getBranchById);
  *       200:
  *         description: Successfully updated branch details.
  */
-router.put("/:id", branchController.updateBranch);
+router.put("/:id", validateRequest(branchSchema), updateBranch);
 
 // Delete a branch by ID (delete)
 /**
@@ -142,6 +149,6 @@ router.put("/:id", branchController.updateBranch);
  *       404:
  *         description: Branch not found
  */
-router.delete("/:id", branchController.deleteBranch);
+router.delete("/:id", deleteBranch);
 
 export default router;
