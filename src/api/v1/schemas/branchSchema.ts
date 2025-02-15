@@ -3,12 +3,6 @@ import Joi, { ObjectSchema } from "joi";
 
 // Defining a schema using Joi's object validation method
 export const branchSchema: ObjectSchema = Joi.object({ 
-  branchId: Joi.string().optional().messages({
-    "any.required": "Branch ID is required.",
-    "string.empty": "Branch ID cannot be empty",
-  }),
-  //  optional string, if empty triggers validation
-
   branchName: Joi.string().required().messages({
     "any.required": "Branch name is required.",
     "string.empty": "Branch name cannot be empty.",

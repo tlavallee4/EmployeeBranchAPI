@@ -25,6 +25,6 @@ export const employeeSchema: ObjectSchema = Joi.object({
   employeeBranchId: Joi.string().required().messages({
     "any.required": "Branch ID is required.",
     "string.empty": "Branch ID cannot be empty.",
-  }),
+  })
   // employeeBranchId required, triggers validation message if left empty
-});
+}).unknown(false);

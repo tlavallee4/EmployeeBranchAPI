@@ -71,7 +71,7 @@ export const updateBranch = async (
             req.body
         );
         res.status(200).json( 
-            successResponse(updateBranch, "Item updated successfully")
+            successResponse(updatedBranch, "Item updated successfully")
     );
     } catch (error) {
         next(error);

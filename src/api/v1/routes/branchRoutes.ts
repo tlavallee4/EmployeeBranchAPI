@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import { validate, validateRequest } from "../middleware/validate";
+import { validateRequest } from "../middleware/validate";
 import { branchSchema } from "../schemas/branchSchema";
 import { createBranch, 
         getBranches,

@@ -26,20 +26,29 @@ export const getBranchById = async (branchId: string): Promise<Branch | null> =>
     return branch || null;
 };
 
+// Update branch
+export const updateBranch = async (
+    branchId: string,
+    updates: Partial<Branch>
+): Promise<Branch | null> => {
+    const snapshot = await getDocuments(COLLECTION);
+    const branchExists = snapshot.docs.some((doc) => doc.id === branchId);
+
+    if (!branchExists) {
+        throw new Error(`Branch with ID ${branchId} not found.`);
+    }
+
+    await updateDocument(COLLECTION, branchId, updates);
+    return { branchId, ...updates } as Branch;
+};
+
+
 // Create a new branch
 export const createBranch = async (branch: Partial<Branch>): Promise<Branch> => {
     const id = await createDocument(COLLECTION, branch);
     return { branchId: id, ...branch } as Branch;
 };
 
-// Update a branch by ID
-export const updateBranch = async (
-    branchId: string,
-    updates: Partial<Branch>
-): Promise<Branch> => {
-    await updateDocument(COLLECTION, branchId, updates);
-    return { branchId, ...updates } as Branch;
-};
 
 // Delete a branch by ID
 export const deleteBranch = async (branchId: string): Promise<void> => {

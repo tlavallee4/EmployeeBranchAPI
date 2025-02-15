@@ -172,7 +172,7 @@ router.put("/:id", validateRequest(employeeSchema), updateEmployee);
  *       404:
  *         description: Employee not found
  */
-router.delete("/:id", validateRequest(employeeSchema), deleteEmployee);
+router.delete("/:id", deleteEmployee);
 
 // New Endpoints
 

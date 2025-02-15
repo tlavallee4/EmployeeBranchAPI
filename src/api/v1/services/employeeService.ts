@@ -25,12 +25,19 @@ export const createEmployee = async (Employee: Partial<Employee>): Promise<Emplo
 
 // Update a Employee by ID
 export const updateEmployee = async (
-    EmployeeId: string,
+    employeeId: string,
     updates: Partial<Employee>
-): Promise<Employee> => {
-    await updateDocument(COLLECTION, EmployeeId, updates);
-    return { EmployeeId, ...updates } as Employee;
+): Promise<Employee | null> => {
+    await updateDocument(COLLECTION, employeeId, updates);
+    const snapshot = await getDocuments(COLLECTION);
+    const updatedEmployee = snapshot.docs
+        .map((doc) => ({ employeeId: doc.id, ...doc.data() } as Employee))
+        .find((emp) => emp.employeeId === employeeId);
+
+    return updatedEmployee || null;
 };
+
+
 
 // Delete a Employee by ID
 export const deleteEmployee = async (EmployeeId: string): Promise<void> => {
@@ -39,11 +46,12 @@ export const deleteEmployee = async (EmployeeId: string): Promise<void> => {
 
 
 // Get Employee by ID
-export const getEmployeeById = async (employeeId: string): Promise<Employee | null> => {
+export const getEmployeeById = async (id: string): Promise<Employee | null> => {
     const snapshot = await getDocuments(COLLECTION);
-    const employee = snapshot.docs.map((doc) => (
-        { employeeId: doc.id, ...doc.data() } as Employee)).find((emp) => 
-            emp.employeeId === employeeId);
+    const employee = snapshot.docs
+        .map((doc) => ({ employeeId: doc.id, ...doc.data() } as Employee))
+        .find((emp) => emp.employeeId === id);
+
     return employee || null;
 };
 

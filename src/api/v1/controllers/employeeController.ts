@@ -70,7 +70,7 @@ export const updateEmployee = async(
             req.body
         );
         res.status(200).json(
-            successResponse(updateEmployee, "Employee updated")
+            successResponse(updatedEmployee, "Employee updated")
         );
     }catch(error){
         next(error);
