@@ -64,3 +64,51 @@ describe("createEmployee", () => {
         });
     });
 });
+
+describe("updateEmployee", () => {
+    const mockEmployeeUpdate = {
+        employeeName: "Updated Name",
+        employeePosition: "Senior Developer",
+        employeeEmail: "updated@example.com",
+        employeeBranchId: "4",
+    };
+
+    it("should return 200 when an employee is updated", async () => {
+        (employeeService.updateEmployee as jest.Mock).mockResolvedValue(mockEmployeeUpdate);
+
+        mockReq.params = { id: "1" };
+        mockReq.body = mockEmployeeUpdate;
+        await employeeController.updateEmployee(
+            mockReq as Request,
+            mockRes as Response,
+            mockNext
+        );
+
+        expect(mockRes.status).toHaveBeenCalledWith(200);
+        expect(mockRes.json).toHaveBeenCalledWith({
+            message: "Employee updated",
+            status: "success",
+            data: mockEmployeeUpdate,
+        });
+    });
+});
+
+describe("deleteEmployee", () => {
+    it("should return 200 when an employee is deleted", async () => {
+        (employeeService.deleteEmployee as jest.Mock).mockResolvedValue(undefined);
+
+        mockReq.params = { id: "1" };
+        await employeeController.deleteEmployee(
+            mockReq as Request,
+            mockRes as Response,
+            mockNext
+        );
+
+        expect(mockRes.status).toHaveBeenCalledWith(200);
+        expect(mockRes.json).toHaveBeenCalledWith({
+            message: "Employee deleted",
+            status: "success",
+            data: null,
+        });
+    });
+});
