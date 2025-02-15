@@ -37,22 +37,10 @@ export const updateEmployee = async (
     return updatedEmployee || null;
 };
 
-
-
-// Delete an Employee by ID
+// Delete employee
 export const deleteEmployee = async (employeeId: string): Promise<void> => {
-    const snapshot = await getDocuments(COLLECTION);
-    const employeeExists = snapshot.docs.some((doc) => doc.id === employeeId);
-
-    if (!employeeExists) {
-        const error: any = new Error(`Employee with ID ${employeeId} not found`);
-        error.status = 404;
-        throw error;
-    }
-
     await deleteDocument(COLLECTION, employeeId);
 };
-
 
 // Get Employee by ID
 export const getEmployeeById = async (id: string): Promise<Employee | null> => {
