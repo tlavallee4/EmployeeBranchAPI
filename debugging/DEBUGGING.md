@@ -1,72 +1,69 @@
 # Debugging Analysis
 
-## Scenario 1: Server initialized
+## Scenario 1: validateRequest
 
-- **Breakpoint Location:** `src/server.ts` at line 11
-- **Objective:** To confirm the `PORT` variable is properly initialized and used for the server to start listening for incoming requests.
-
-### Debugger Observations
-
-- **Variable States:**
-  - `PORT`: `3000`
-
-- **Call Stack:**
-  - The `app.listen(PORT)` method is called in `server.ts` to start the server.
-  - The execution pauses at the `console.log` statement, confirming the server is running on the correct port.
-
-- **Behavior:**
-  - The server initializes successfully and logs that it is on port `3000`.
-
-### Analysis
-- The `PORT` variable is initialized correctly, and the server npm starts without issues.
-- No unexpected behavior
-- Shows that the server is running and waiting for API requests.
-
-
-
-## Scenario 2: Update Branch
-
-- **Breakpoint Location:** branchController.ts, line 57
-- **Objective:** To verify the call to updateBranch and analyze the branchController role in updating branch
+- **Breakpoint Location:** validate.ts (Line 24)
+- **Objective:** Ensure update requests pass Joi validation
 
 ### Debugger Observations
 
 - **Variable States:**
-  - branchService: Contains methods `getBranches`, `createBranch`, `updateBranch`, and `deleteBranch`
-  - `req.params`: Undefined (as observed in the watch tab).
-
+  - req.body, req.params, and req.query are being merged into a single object for validation.
 - **Call Stack:**
-  - Execution pauses at the await branchService.updateBranch line where the req.params.id and req.body are passed to the service method.
+  - function calls are shown from src/api/v1 that API is being executed.
 
 - **Behavior:**
-  - The controller attempts to process the branch update, but `req.params.id` is undefined
+  - The debugger is paused inside validate.ts, showing that the request is being processed
+  - The validateRequest function is merging request data into a single object before validation
 
 ### Analysis
-
-- `req.params` is undefined, which may result in an error during the update process?
-- Troubleshooting for validation of `req.params.id`.
+ - This confirms that request data is correctly merged before validation & the debugger shows that validation is being executed as expected.
 
 
+## Scenario 2: deleteBranch
 
-## Scenario 3: Employee Creation
-
-- **Breakpoint Location:** employeeController.ts, line 22
-- **Objective:** 
+- **Breakpoint Location:** branchController.ts (Line 82)
+- **Objective:** Confirm proper handling of update and delete operations in Firestore.
 
 ### Debugger Observations
 
 - **Variable States:**
-- employeeService: methods for managing employees, such as getEmployees, createEmployee, updateEmployee, and deleteEmployee
-- __filename: "C:\\Users\\Tanelle\\..." full path of the employeeController.ts file
+  - deleteBranch and createBranch is actively executing.
+  - Firestore queries return expected results based on IDs.
 
 - **Call Stack:**
-  - `createEmployee` is triggered from the employee creation route API call. including createEmployee method
+  - The call is paused inside a function in src/api/v1/
+  - require.extension TypeScript files are being processed before executing.
 
 - **Behavior:**
-  - The controller calls employeeService.createEmployee with the req.body to create a new employee.
+  - Updates modify existing branch records as expected.
+  - Deletion requests remove specified documents successfully.
 
 ### Analysis
 
-- employeeService object is initialized and works in the controller
-- Could add error handing for req
-- This shows API requests to the services for creating new employee records
+- **Key Takeaways:**
+  - Ensuring IDs are passed correctly enables Firestore operations to work properly.
+
+## Scenario 3: branchPhone
+
+- **Breakpoint Location:** branchSchema.ts (Line 18)
+- **Objective:** Verify branch phone number validation rules are correctly applied.
+
+### Debugger Observations
+
+- **Variable States:**
+  - branchPhone is processed and checked against Joi validation rules.
+  - Tested to confirm expected behavior
+
+- **Call Stack:**
+  - The request reaches validateRequest middleware.
+  - The branchSchema applies the validation rules before proceeding.
+
+- **Behavior:**
+  - Phone number validation correctly enforces formatting requirements.
+  - Error messages provide clear feedback when input does not meet expected criteria.
+
+### Analysis
+
+- **Key Takeaways:**
+  - Joi validation effectively enforces phone number format consistency.
