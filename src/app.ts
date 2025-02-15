@@ -9,7 +9,8 @@ import branchRoutes from "./api/v1/routes/branchRoutes";
 
 // import setupSwagger endpoint
 import setupSwagger from "../config/swagger"; 
-import { timeStamp } from "console";
+import { error, timeStamp } from "console";
+import errorHandler from "./api/v1/middleware/errorHandler";
 
 const app = express();
 
@@ -17,6 +18,8 @@ const app = express();
 app.use(morgan("combined"));
 
 app.use(express.json());
+
+app.use(errorHandler);
 
 // setup swagger for api documentation
 setupSwagger(app);
