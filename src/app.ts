@@ -8,7 +8,7 @@ import employeeRoutes from "./api/v1/routes/employeeRoutes";
 import branchRoutes from "./api/v1/routes/branchRoutes";
 
 // import setupSwagger endpoint
-import setupSwagger from "../config/swagger"; 
+import setupSwagger from "../config/swaggerOptions"; 
 import { error, timeStamp } from "console";
 import errorHandler from "./api/v1/middleware/errorHandler";
 
