@@ -1,8 +1,6 @@
 import dotenv from "dotenv";
-
-import morgan from "morgan";
-
 dotenv.config();
+import morgan from "morgan";
 
 // import employeeRoutes
 import employeeRoutes from "./api/v1/routes/employeeRoutes";
@@ -25,7 +23,6 @@ setupSwagger(app);
 app.use(morgan("combined"));
 
 app.use(express.json());
-app.use(errorHandler);
 
 /**
  * @openapi
@@ -46,4 +43,5 @@ app.get("/health", (req, res) => {
 app.use("/api/v1/employees", employeeRoutes)
 app.use("/api/v1/branches", branchRoutes);
 
+app.use(errorHandler);
 export default app;
