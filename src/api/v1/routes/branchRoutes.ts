@@ -1,16 +1,34 @@
 import express, { Router } from "express";
 import { validateRequest } from "../middleware/validate";
 import { branchSchema } from "../schemas/branchSchema";
-import { createBranch, 
-        getBranches,
-        getBranchById, 
-        updateBranch,
-        deleteBranch,
+import {
+	createBranch,
+	getBranches,
+	getBranchById,
+	updateBranch,
+	deleteBranch,
 } from "../controllers/branchController";
 
 const router: Router = express.Router();
 
-// Create a new branch (create)
+/**
+ * @openapi
+ * /api/v1/branches:
+ *   get:
+ *     summary: Retrieve a list of all branches
+ *     tags: [Branches]
+ *     responses:
+ *       200:
+ *         description: A list of branches
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: "#/components/schemas/Branch"
+ */
+router.get("/", getBranches);
+
 /**
  * @openapi
  * /api/v1/branches:
@@ -22,14 +40,7 @@ const router: Router = express.Router();
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               branchName:
- *                 example: Vancouver Branch
- *               branchAddress:
- *                 example: 1300 Burrard St, Vancouver, BC, V6Z 2C7
- *               branchPhone:
- *                 example: 604-456-0022
+ *             $ref: "#/components/schemas/Branch"
  *     responses:
  *       201:
  *         description: Successfully created a new branch.
@@ -39,55 +50,17 @@ const router: Router = express.Router();
  *               type: object
  *               properties:
  *                 message:
- *                   example: Branch created successfully.
+ *                   example: "Branch created successfully."
  *                 data:
- *                   type: object
- *                   properties:
- *                     branchId:
- *                       example: "1"
- *                     branchName:
- *                       example: Vancouver Branch
- *                     branchAddress:
- *                       example: 1300 Burrard St, Vancouver, BC, V6Z 2C7
- *                     branchPhone:
- *                       example: 604-456-0022
+ *                   $ref: "#/components/schemas/Branch"
  */
 router.post("/", validateRequest(branchSchema), createBranch);
 
-// Get all branches (read)
-/**
- * @openapi
- * /api/v1/branches:
- *   get:
- *     summary: Get an array of all branches
- *     tags: [Branches]
- *     responses:
- *       200:
- *         description: List of all branches
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   branchId:
- *                     example: "1"
- *                   branchName:
- *                     example: Vancouver Branch
- *                   branchAddress:
- *                     example: 1300 Burrard St, Vancouver, BC, V6Z 2C7
- *                   branchPhone:
- *                     example: 604-456-0022
- */
-router.get("/", getBranches);
-
-// Get branch by ID
 /**
  * @openapi
  * /api/v1/branches/{id}:
  *   get:
- *     summary: Get a branch by ID
+ *     summary: Retrieve a branch by ID
  *     tags: [Branches]
  *     parameters:
  *       - name: id
@@ -96,41 +69,49 @@ router.get("/", getBranches);
  *         schema:
  *           type: string
  *           example: "1"
+ *         description: The unique identifier of the branch.
  *     responses:
  *       200:
  *         description: Branch details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/Branch"
  *       404:
  *         description: Branch not found
  */
 router.get("/:id", getBranchById);
 
-// Update a branch by ID (update)
 /**
  * @openapi
  * /api/v1/branches/{id}:
  *   put:
  *     summary: Update a branch by ID
  *     tags: [Branches]
+ *     parameters:
+ *       - name: id
+ *         in: path
+ *         required: true
+ *         schema:
+ *           type: string
+ *           example: "1"
+ *         description: The unique identifier of the branch.
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               branchName:
- *                 example: Updated Vancouver Branch
- *               branchAddress:
- *                 example: 1234 New Address St, Vancouver, BC, V6Z 2C7
- *               branchPhone:
- *                 example: 604-999-1234
+ *             $ref: "#/components/schemas/Branch"
  *     responses:
  *       200:
  *         description: Successfully updated branch details.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/Branch"
  */
 router.put("/:id", validateRequest(branchSchema), updateBranch);
 
-// Delete a branch by ID (delete)
 /**
  * @openapi
  * /api/v1/branches/{id}:
@@ -142,10 +123,19 @@ router.put("/:id", validateRequest(branchSchema), updateBranch);
  *         in: path
  *         required: true
  *         schema:
+ *           type: string
  *           example: "1"
+ *         description: The unique identifier of the branch.
  *     responses:
  *       200:
- *         description: Branch successfully deleted
+ *         description: Successfully deleted the branch.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   example: "Branch deleted successfully."
  *       404:
  *         description: Branch not found
  */
