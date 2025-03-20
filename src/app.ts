@@ -1,5 +1,6 @@
-// import helmet
+// import helmet & cors
 import helmet from "helmet";
+import cors from "cors";
 
 import dotenv from "dotenv";
 dotenv.config();
@@ -34,6 +35,13 @@ app.use(
 	  hidePoweredBy: true,
 	})
   );
+
+app.use(cors({
+	origin: ["http://localhost:3000"],
+	methods: ["GET", "POST", "PUT", "DELETE"],
+	allowedHeaders: ["Content-Type", "Authorization"],
+  }
+));
 
 // setup swagger for api documentation
 setupSwagger(app);
