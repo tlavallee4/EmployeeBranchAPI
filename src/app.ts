@@ -1,5 +1,9 @@
+// import helmet
+import helmet from "helmet";
+
 import dotenv from "dotenv";
 dotenv.config();
+
 import morgan from "morgan";
 
 // import employeeRoutes
@@ -15,6 +19,9 @@ import errorHandler from "./api/v1/middleware/errorHandler";
 import branchRoutes from "./api/v1/routes/branchRoutes";
 
 const app: Express = express();
+
+// helmet 
+app.use(helmet());
 
 // setup swagger for api documentation
 setupSwagger(app);
@@ -44,4 +51,9 @@ app.use("/api/v1/employees", employeeRoutes)
 app.use("/api/v1/branches", branchRoutes);
 
 app.use(errorHandler);
+
+// test to make sure its running proper
+// console.log("Loaded Environment Variables:", process.env);
+
 export default app;
+
