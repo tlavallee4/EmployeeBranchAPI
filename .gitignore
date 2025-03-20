@@ -3,3 +3,5 @@ dist/
 .vscode/
 
 assignment-03-bd113-firebase-adminsdk-fbsvc-c4b3c4bcfd.json
+
+.env

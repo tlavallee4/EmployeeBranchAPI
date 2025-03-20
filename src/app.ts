@@ -1,28 +1,31 @@
-import express from "express";
+import dotenv from "dotenv";
+
 import morgan from "morgan";
+
+dotenv.config();
 
 // import employeeRoutes
 import employeeRoutes from "./api/v1/routes/employeeRoutes";
 
+import express, { Express } from "express";
+
+// import setupSwagger endpoint
+import setupSwagger from "../config/swagger"; 
+import { error, timeStamp } from "console";
+import errorHandler from "./api/v1/middleware/errorHandler";
 // import branchRoutes
 import branchRoutes from "./api/v1/routes/branchRoutes";
 
-// import setupSwagger endpoint
-import setupSwagger from "../config/swaggerOptions"; 
-import { error, timeStamp } from "console";
-import errorHandler from "./api/v1/middleware/errorHandler";
+const app: Express = express();
 
-const app = express();
+// setup swagger for api documentation
+setupSwagger(app);
 
 // Use Morgan for HTTP request logging
 app.use(morgan("combined"));
 
 app.use(express.json());
-
 app.use(errorHandler);
-
-// setup swagger for api documentation
-setupSwagger(app);
 
 /**
  * @openapi
