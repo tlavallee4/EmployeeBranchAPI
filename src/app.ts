@@ -1,25 +1,55 @@
-import express from "express";
+// import helmet & cors
+import helmet from "helmet";
+import cors from "cors";
+
+import dotenv from "dotenv";
+dotenv.config();
+
 import morgan from "morgan";
 
 // import employeeRoutes
 import employeeRoutes from "./api/v1/routes/employeeRoutes";
 
-// import branchRoutes
-import branchRoutes from "./api/v1/routes/branchRoutes";
+import express, { Express } from "express";
 
 // import setupSwagger endpoint
 import setupSwagger from "../config/swagger"; 
-import { timeStamp } from "console";
+import { error, timeStamp } from "console";
+import errorHandler from "./api/v1/middleware/errorHandler";
+// import branchRoutes
+import branchRoutes from "./api/v1/routes/branchRoutes";
 
-const app = express();
+const app: Express = express();
+
+// helmet 
+app.use(
+	helmet({
+	  contentSecurityPolicy: {
+		directives: {
+		  "default-src": ["'self'"],
+		  "script-src": ["'self'"],  // XSS Protection
+		  "style-src": ["'self'"],
+		},
+	  },
+	  frameguard: { action: "deny" }, // Clickjacking
+	  hidePoweredBy: true,
+	})
+  );
+
+app.use(cors({
+	origin: ["http://localhost:3000"],
+	methods: ["GET", "POST", "PUT", "DELETE"],
+	allowedHeaders: ["Content-Type", "Authorization"],
+  }
+));
+
+// setup swagger for api documentation
+setupSwagger(app);
 
 // Use Morgan for HTTP request logging
 app.use(morgan("combined"));
 
 app.use(express.json());
-
-// setup swagger for api documentation
-setupSwagger(app);
 
 /**
  * @openapi
@@ -40,4 +70,10 @@ app.get("/health", (req, res) => {
 app.use("/api/v1/employees", employeeRoutes)
 app.use("/api/v1/branches", branchRoutes);
 
+app.use(errorHandler);
+
+// test to make sure its running proper
+// console.log("Loaded Environment Variables:", process.env);
+
 export default app;
+

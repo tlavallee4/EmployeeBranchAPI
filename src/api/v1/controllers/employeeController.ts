@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import * as employeeService from "../services/employeeService";
-import type { Employee } from "../services/employeeService";
+import type { Employee } from "../models/employeeModel";
+import { successResponse } from "../models/responseModel";
 
 // Get employees
 export const getEmployees = async (
@@ -10,8 +11,10 @@ export const getEmployees = async (
 ): Promise<void> => {
     try {
         // Fetch all employees from the service and storing it in employees
-        const employees: Employee[] = await employeeService.getEmployees();
-        res.status(200).json({ message: "Employees received", data: employees });
+        const employees: Employee[] = await employeeService.getAllEmployees();
+        res.status(200).json(
+            successResponse(employees, "Employees received")
+        );
     } catch (error) {
         // pass to next function if error
         next(error);
@@ -28,7 +31,9 @@ export const createEmployee = async (
         // Create a new employee using the service and storing in employee
         const newEmployee: Employee = await employeeService.createEmployee(req.body);
         // 201 means successful creation
-        res.status(201).json({ message: "Employee created", data: newEmployee });
+        res.status(201).json(
+            successResponse(newEmployee, "Employee created")
+        );
     } catch (error) {
         next(error);
     }
@@ -46,7 +51,9 @@ export const getEmployeeById = async (
             res.status(404).json({ message: `Employee with ID ${req.params.id} not found` });
             return;
         }
-        res.status(200).json({ message: "Employee found", data: employee });
+        res.status(200).json(
+            successResponse(employee, "Employee found")
+        );
     } catch (error) {
         next(error);
     }
@@ -62,7 +69,9 @@ export const updateEmployee = async(
             req.params.id,
             req.body
         );
-        res.status(200).json({message: "Employee updated", data:updatedEmployee});
+        res.status(200).json(
+            successResponse(updatedEmployee, "Employee updated")
+        );
     }catch(error){
         next(error);
     }
@@ -76,7 +85,9 @@ export const deleteEmployee = async(
 ): Promise<void> => {
     try{
         await employeeService.deleteEmployee(req.params.id);
-        res.status(200).json({message: "Employee deleted"});
+        res.status(200).json(
+            successResponse(null, "Employee deleted")
+        );    
     }catch(error){
         next(error);
     }
@@ -98,7 +109,9 @@ export const getEmployeesByBranch = async (
             res.status(404).json({ message: `No employees found for branch ID ${branchId}` });
             return;
         }
-        res.status(200).json({ message: "Employees found", data: employees });
+        res.status(200).json(
+            successResponse(employees,  "Employees found")
+        );
     } catch (error) {
         next(error);
     }
@@ -118,7 +131,9 @@ export const getEmployeesByDepartment = async (
             res.status(404).json({ message: `No employees found for department ${department}` });
             return;
         }
-        res.status(200).json({ message: "Employees found", data: employees });
+        res.status(200).json(
+            successResponse(employees, "Employees found")
+        );
     } catch (error) {
         next(error);
     }

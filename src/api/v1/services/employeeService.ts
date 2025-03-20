@@ -1,120 +1,68 @@
-// Create interface for Employees
-export type Employee = {
-    employeeId: string;
-    employeeName: string;
-    employeePosition: string;
-    employeeDepartment: string;
-    employeeEmail: string;
-    employeePhone: string;
-    employeeBranchId: string;
-}
+import { Employee } from "../models/employeeModel";
+import {
+    createDocument,
+    getDocuments,
+    updateDocument,
+    deleteDocument
+} from "../repositories/firestoreRepositoriy";
 
-// employee stored
-const employees: Employee[] = [
-    {
-        employeeId: "1",
-        employeeName: "Alice Johnson",
-        employeePosition: "Branch Manager",
-        employeeDepartment: "Management",
-        employeeEmail: "alice.johnson@pixell-river.com",
-        employeePhone: "604-555-0148",
-        employeeBranchId: "1",
-    },
-    {
-        employeeId: "2",
-        employeeName: "Bob Smith",
-        employeePosition: "Software Engineer",
-        employeeDepartment: "IT",
-        employeeEmail: "bob.smith@pixell-river.com",
-        employeePhone: "204-555-0193",
-        employeeBranchId: "3",
-    },
-    {
-        employeeId: "3",
-        employeeName: "Maria Garcia",
-        employeePosition: "Loan Officer",
-        employeeDepartment: "Loans",
-        employeeEmail: "maria.garcia@pixell-river.com",
-        employeePhone: "204-555-0193",
-        employeeBranchId: "3",
-    },
-    {
-        employeeId: "4",
-        employeeName: "James Wilson",
-        employeePosition: "IT Support Specialist",
-        employeeDepartment: "IT",
-        employeeEmail: "james.wilson@pixell-river.com",
-        employeePhone: "604-555-0134",
-        employeeBranchId: "1",
-    },
-];
+const COLLECTION = "employees";
 
-// get all employees
-export const getEmployees = async() : Promise<Employee[]> => {
-    return employees;
-}
-
-// create a new employee
-export const createEmployee = async( employee: {
-    employeeName: string;
-    employeePosition: string;
-    employeeDepartment: string;
-    employeeEmail: string;
-    employeePhone: string;
-    employeeBranchId: string;
-}): Promise<Employee> => { 
-    // ...item is a spread. spreads out the value to an array
-    // get an id
-    const newEmployee: Employee = {employeeId: Date.now().toString(), ...employee};
-    // add the employee to Employee storage    
-    employees.push(newEmployee);
-        // return created employee
-        return newEmployee;
+// Get all Employees from Firestore
+export const getAllEmployees = async (): Promise<Employee[]> => {
+    const snapshot = await getDocuments(COLLECTION);
+    return snapshot.docs.map((doc) => {
+        const data = doc.data();
+        return { employeeId: doc.id, ...data } as Employee;
+    });
 };
 
-// Get employee by ID
-export const getEmployeeById = async (id: string): Promise<Employee | null> => {
-    return employees.find((employee) => employee.employeeId === id) || null;
+// Create a new Employee
+export const createEmployee = async (Employee: Partial<Employee>): Promise<Employee> => {
+    const id = await createDocument(COLLECTION, Employee);
+    return { EmployeeId: id, ...Employee } as Employee;
 };
 
-// Update employee
-// Iterate through employees by id
-export const updateEmployee = async(
-    employeeId:string, 
-    employee: {employeeName: string, employeePosition: string, employeeDepartment: string,
-        employeeEmail: string, employeePhone: string, employeeBranchId: string}
-): Promise<Employee> => {
-    const index: number = employees.findIndex((i) => i.employeeId === employeeId);
-    // if match not found
-    if(index === -1){
-        throw new Error(`Item with ID ${employeeId} not found`);
-    }
-    // Updating the employee
-    employees[index] = {employeeId, ...employee}
-    // Return the updated employee
-    return employees[index]
+// Update a Employee by ID
+export const updateEmployee = async (
+    employeeId: string,
+    updates: Partial<Employee>
+): Promise<Employee | null> => {
+    await updateDocument(COLLECTION, employeeId, updates);
+    const snapshot = await getDocuments(COLLECTION);
+    const updatedEmployee = snapshot.docs
+        .map((doc) => ({ employeeId: doc.id, ...doc.data() } as Employee))
+        .find((emp) => emp.employeeId === employeeId);
+
+    return updatedEmployee || null;
 };
 
 // Delete employee
 export const deleteEmployee = async (employeeId: string): Promise<void> => {
-    const index: number = employees.findIndex((i) => i.employeeId === employeeId);
-
-    // If no id employee match is found
-    if (index === -1) {
-        throw new Error(`Item with ID ${employeeId} not found`);
-    }
-    // else remove the employee
-    employees.splice(index, 1);
+    await deleteDocument(COLLECTION, employeeId);
 };
 
-// New Endpoint
+// Get Employee by ID
+export const getEmployeeById = async (id: string): Promise<Employee | null> => {
+    const snapshot = await getDocuments(COLLECTION);
+    const employee = snapshot.docs
+        .map((doc) => ({ employeeId: doc.id, ...doc.data() } as Employee))
+        .find((emp) => emp.employeeId === id);
 
-// Get employee by branch id
+    return employee || null;
+};
+
+// Get Employees by Branch ID
 export const getEmployeesByBranch = async (branchId: string): Promise<Employee[]> => {
-    return employees.filter((employee) => employee.employeeBranchId === branchId);
+    const snapshot = await getDocuments(COLLECTION);
+    return snapshot.docs.map((doc) => (
+        { employeeId: doc.id, ...doc.data() } as Employee))
 };
 
-// Get employee by department 
+// Get Employees by Department
 export const getEmployeesByDepartment = async (department: string): Promise<Employee[]> => {
-    return employees.filter((employee) => employee.employeeDepartment.toLowerCase() === department.toLowerCase());
+    const snapshot = await getDocuments(COLLECTION);
+    return snapshot.docs.map((doc) => (
+        { employeeId: doc.id, ...doc.data() } as Employee)).filter((employee) => 
+            employee.employeeDepartment === department);
 };

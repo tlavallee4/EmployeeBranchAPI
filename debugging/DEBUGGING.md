@@ -1,72 +1,79 @@
 # Debugging Analysis
 
-## Scenario 1: Server initialized
+## Scenario 1: Environment Variable Management
 
-- **Breakpoint Location:** `src/server.ts` at line 11
-- **Objective:** To confirm the `PORT` variable is properly initialized and used for the server to start listening for incoming requests.
-
-### Debugger Observations
-
-- **Variable States:**
-  - `PORT`: `3000`
-
-- **Call Stack:**
-  - The `app.listen(PORT)` method is called in `server.ts` to start the server.
-  - The execution pauses at the `console.log` statement, confirming the server is running on the correct port.
-
-- **Behavior:**
-  - The server initializes successfully and logs that it is on port `3000`.
-
-### Analysis
-- The `PORT` variable is initialized correctly, and the server npm starts without issues.
-- No unexpected behavior
-- Shows that the server is running and waiting for API requests.
-
-
-
-## Scenario 2: Update Branch
-
-- **Breakpoint Location:** branchController.ts, line 57
-- **Objective:** To verify the call to updateBranch and analyze the branchController role in updating branch
+- **Breakpoint Location:** src/app.ts, Line 6
+- **Objective:** Verify that environment variables are loaded using dotenv and API keys is managed.
 
 ### Debugger Observations
 
-- **Variable States:**
-  - branchService: Contains methods `getBranches`, `createBranch`, `updateBranch`, and `deleteBranch`
-  - `req.params`: Undefined (as observed in the watch tab).
-
-- **Call Stack:**
-  - Execution pauses at the await branchService.updateBranch line where the req.params.id and req.body are passed to the service method.
-
-- **Behavior:**
-  - The controller attempts to process the branch update, but `req.params.id` is undefined
+- **Variable States:** 
+  - dotenv_1 (indicating that dotenv is loaded)
+- **Call Stack:** 
+  - Pauses at dotenv.config(), is being read.
+- **Behavior:** 
+  - The application loads the environment variables from .env before other services.
 
 ### Analysis
 
-- `req.params` is undefined, which may result in an error during the update process?
-- Troubleshooting for validation of `req.params.id`.
+- **Learnings:**
+  - The .env file is being read, and dotenv is configured.
+- **Unexpected Behavior:**
+  - No errors.
+- **Improvements:**
+  - .env.example is included in the repository to guide other developers on required variables.
+- **Project Understanding:**
+  - Securely managing environment variables for sensitive data like API keys.
 
 
+## Scenario 2: Helmet.js Security Headers
 
-## Scenario 3: Employee Creation
-
-- **Breakpoint Location:** employeeController.ts, line 22
-- **Objective:** 
+- **Breakpoint Location:** src/app.ts, Line 27
+- **Objective:** Helmet.js is correctly setting security headers for XSS protection and clickjacking prevention.
 
 ### Debugger Observations
 
-- **Variable States:**
-- employeeService: methods for managing employees, such as getEmployees, createEmployee, updateEmployee, and deleteEmployee
-- __filename: "C:\\Users\\Tanelle\\..." full path of the employeeController.ts file
-
-- **Call Stack:**
-  - `createEmployee` is triggered from the employee creation route API call. including createEmployee method
-
-- **Behavior:**
-  - The controller calls employeeService.createEmployee with the req.body to create a new employee.
+- **Variable States:**  
+  - helmet_1 = {default: f{}}, indicating that Helmet is imported and ready for use.
+- **Call Stack:**  
+  - The debugger shows execution reaching the helmet() function, confirming that security headers are applied.
+- **Behavior:**  
+  - contentSecurityPolicy is configured to restrict script sources (script-src: ['self']).
+  - frameguard: confirms that clickjacking protection is active.
 
 ### Analysis
 
-- employeeService object is initialized and works in the controller
-- Could add error handing for req
-- This shows API requests to the services for creating new employee records
+- **Learnings:**
+  - Helmet.js is correct, applying security headers as expected.
+- **Unexpected Behavior:**
+  - No errors, meaning the security middleware is working without blocking requests.
+- **Improvements:**
+  - Logging headers to verify Postman.
+- **Project Understanding:**
+  - Helmet.js strengthens security for XSS and clickjacking.
+
+
+## Scenario 3: OpenAPI Documentation Integration
+
+- **Breakpoint Location:** config/swagger.ts, Line 9
+- **Objective:** Swagger UI properly generates and serves API documentation.
+
+### Debugger Observations
+
+- **Variable States:**  
+  - specs = openapi: '3.0.0',  OpenAPI specification is being generated
+- **Call Stack:**  
+  - Execution pauses before app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs)), API documentation setup process.
+- **Behavior:**  
+  - Swagger loads the OpenAPI spec, making API documentation available at /api-docs.
+
+### Analysis
+
+- **Learnings:**
+  - OpenAPI specification is correctly being generated into Swagger UI.
+- **Unexpected Behavior:**
+  - No errors indicate that Swagger is successfully processing the OpenAPI JSON file
+- **Improvements:**
+  - Confirm the /api-docs endpoint is accessible after server startup
+- **Project Understanding:**
+  - OpenAPI allows developers to explore and test the API directly from the browser.
