@@ -1,8 +1,15 @@
 // import swagger ui middles, jsdoc-library
 import swaggerUi from "swagger-ui-express";
 import swaggerJsDoc from "swagger-jsdoc";
+import dotenv from "dotenv";
 
 import {Express} from "express";
+
+// environment variables loaded 
+dotenv.config();
+
+// get server URL
+const serverURL = process.env.SWAGGER_SERVER_URL || "http://localhost:3000/api/v1";
 
 // define swagger options 
 const swaggerOptions: swaggerJsDoc.Options = {
