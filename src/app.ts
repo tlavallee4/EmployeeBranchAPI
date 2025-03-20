@@ -21,7 +21,19 @@ import branchRoutes from "./api/v1/routes/branchRoutes";
 const app: Express = express();
 
 // helmet 
-app.use(helmet());
+app.use(
+	helmet({
+	  contentSecurityPolicy: {
+		directives: {
+		  "default-src": ["'self'"],
+		  "script-src": ["'self'"],  // XSS Protection
+		  "style-src": ["'self'"],
+		},
+	  },
+	  frameguard: { action: "deny" }, // Clickjacking
+	  hidePoweredBy: true,
+	})
+  );
 
 // setup swagger for api documentation
 setupSwagger(app);
